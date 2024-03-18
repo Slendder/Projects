@@ -1,51 +1,27 @@
-from fastapi import FastAPI, HTTPException, Depends
-from typing import Annotated
-from sqlalchemy.orm import Session
-from pydantic import BaseModel
-from database  import SessionLocal, engine
-import models
-from fastapi.middleware.cors import CORSMiddleware
+from fastapi import FastAPI
 
 app = FastAPI()
 
-origins = [
-    'http://localhost:3000'
-]
+@app.get('/')
+def welcome():
+    return {'message': 'Welcome!'}
 
+@app.get('/api/tasks')
+async def get_task():
+    return "something?"
 
-app.add_middleware(
-    CORSMiddleware,
-    allow_origins=origins
-)
+@app.post('/api/tasks')
+async def create_task():
+    return "create task?"
 
-class TransactionBase(BaseModel): 
-    amount: float
-    category: str
-    description: str
-    is_income: bool
-    date: str
-    
-class TransactionModel(TransactionBase):
-    id: int
-    
-    class Config:
-        orm_mode: True
+@app.get(f'/api/tasks/{id}')
+async def get_single_task():
+    return "single task?"
 
-def get_db():
-    db = SessionLocal()
-    try: 
-        yield db
-    finally:
-        db.close()
-    
-db_dependency = Annotated[Session, Depends(get_db)]
+@app.put(f'/api/tasks/{id}')
+async def update_task():
+    return "updating task?"
 
-models.Base.metadata.create_all(bind=engine)
-
-@app.post("/transactions/", response_model=TransactionModel)
-async def create_transaction(transaction: TransactionBase, db: db_dependency):
-    db_transaction = models.Transaction(**transaction.dict())
-    db.add(db_transaction)
-    db.commit()
-    db.refresh(db_transaction)
-    return db_transaction
+@app.delete(f'/api/tasks/{id}')
+async def delete_task():
+    return "delete task?"
