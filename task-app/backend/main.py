@@ -1,8 +1,10 @@
 from fastapi import FastAPI
-from database import get_all_task 
+from database import get_all_task, create_task
+from models import Task
 app = FastAPI()
 
 @app.get('/')
+
 def welcome():
     return {'message': 'Welcome!'}
 
@@ -12,8 +14,10 @@ async def get_task():
     return tasks
 
 @app.post('/api/tasks')
-async def create_task():
-    return "create task?"
+async def save_task(task: Task):
+    response = await create_task(task.dict())
+    print(response)
+    return 'saving task'
 
 @app.get(f'/api/tasks/{id}')
 async def get_single_task():

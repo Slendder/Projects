@@ -15,10 +15,10 @@ async def get_all_task():
         tasks.append(**document)
     return tasks
 
-async def create_task(task):
+async def create_task(task: Task):
     new_task = await collection.insert_one(task)
     created_task = await collection.find_one({'_id': new_task.inserted_id})
-    return create_task
+    return created_task 
 
 async def update_task(id: str, task):
     await collection.update_one({'_id': id}, {'$set': task})
