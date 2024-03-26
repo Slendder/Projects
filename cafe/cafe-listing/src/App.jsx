@@ -19,7 +19,7 @@ function App() {
         : products.filter((product) => product.available === true)
 
     return (
-      <>
+      <div className={"container"}>
         <h1>Our Collection</h1>
         <p className={"paragraph"}>Introducing our Coffee Collection, a selection of unique coffees from different roast types and origins,
           expertly roasted in small batches and shipped fresh weekly.</p>
@@ -34,7 +34,7 @@ function App() {
               {cardsToShow().map((product) => <Card key={product.id} product={product}/>)}
           </div>
         </div>
-      </>
+      </div>
   )
 }
 
